@@ -12,11 +12,15 @@ Theme:
 - Clean, modern design
 - Removed details card for streamlined experience
 
-Run:
+Run locally:
   pip install flask google-generativeai python-dotenv
   export GEMINI_API_KEY=YOUR_KEY   # or set in .env
   python app.py
 Then open http://127.0.0.1:5000/
+
+On Vercel:
+- Add a `vercel.json` pointing to this file.
+- Vercel will call the `handler()` function.
 """
 
 import os
@@ -28,6 +32,7 @@ from pathlib import Path
 
 from flask import Flask, request, jsonify, g, render_template_string
 import google.generativeai as genai
+
 
 # ------------------------- Config -------------------------
 APP_NAME = "Hostel Assistant"
@@ -1344,7 +1349,12 @@ def api_chat():
 
     return jsonify(result)
 
+# ------------------------- Vercel Handler -------------------------
+def handler(request, response=None):
+    """Vercel entrypoint"""
+    return app(request.environ, response.start_response)
+
+# ------------------------- Local Run -------------------------
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(debug=True, host="0.0.0.0", port=5000)
 
