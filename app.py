@@ -1301,9 +1301,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 </html>
 """
 
-@app.get("/")
+@app.route("/")
 def index():
     return render_template_string(INDEX_HTML)
+
 
 # Provide a "context mode" when message == __context__ so the UI can hydrate
 @app.post("/api/chat")
